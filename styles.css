@@ -1,0 +1,18 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background-color: #f4f4f4;
+}
+
+#searchbutton {
+    background-color: #2563eb;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#searchbutton:hover {
+    background-color: #1d4ed8;
+}
