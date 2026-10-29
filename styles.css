@@ -2,6 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 40px;
     background-color: #f4f4f4;
+    text-align: center;
 }
 
 #searchbutton {
@@ -15,4 +16,13 @@ body {
 
 #searchbutton:hover {
     background-color: #1d4ed8;
+}
+
+.bar {
+    width: 6000px;
+    max-width: 80%;
+    box-sizing: border-box;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }

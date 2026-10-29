@@ -1,20 +1,28 @@
 const searchbutton = document.querySelector("#searchbutton");
+const searchinput = document.querySelector("#searchinput");
+const resultDiv = document.querySelector("#result");
 
 searchbutton.addEventListener("click", async function () {
-    try{
-        const response = await fetch("superheroes.php");
-    
-        if (!response.ok){
-            throw new Error("Failed to fetch data");
-        }
-        
-        // Read the HTML returned by PHP as a string.
-        const result = await response.text();
+    // Read what the user typed.
+    const query = searchinput.value.trim();
 
-        // Display that string.
-        alert(result);
+    resultDiv.textContent = "Loading...";
+
+    try {
+        // Send the query to PHP.
+        const response = await fetch(
+            "superheroes.php?query=" + encodeURIComponent(query)
+        );
+
+        if (!response.ok) {
+            throw new Error(`Request failed: ${response.status}`);
+        }
+
+        // Read and display the HTML returned by PHP.
+        const html = await response.text();
+        resultDiv.innerHTML = html;
     } catch (error) {
         console.error(error);
-        alert("Could not load superheroes. Check that MAMP is running.");
+        resultDiv.textContent = "Unable to load superheroes. Check MAMP.";
     }
 });

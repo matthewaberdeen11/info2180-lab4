@@ -63,10 +63,60 @@ $superheroes = [
   ], 
 ];
 
-?>
+// Return HTML using UTF-8 encoding.
+header("Content-Type: text/html; charset=UTF-8");
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+// Read the search query. If missing, use an empty string.
+$query = $_GET["query"] ?? "";
+
+// Ensure the query is a string.
+if (!is_string($query)) {
+    http_response_code(400);
+    echo "<p>Invalid search query</p>";
+    exit;
+}
+
+// Remove surrounding spaces and ignore letter case.
+$query = strtolower(trim($query));
+
+// Escape text values before inserting them into HTML.
+function escapeHtml($text) {
+    return htmlspecialchars(
+        $text,
+        ENT_QUOTES | ENT_SUBSTITUTE,
+        "UTF-8"
+    );
+}
+
+if ($query === "") {
+    // Blank search: return the full list of aliases.
+    echo "<ul>";
+
+    foreach ($superheroes as $superhero) {
+        echo "<li>" . escapeHtml($superhero["alias"]) . "</li>";
+    }
+
+    echo "</ul>";
+} else {
+    // Search for a matching name or alias.
+    $match = null;
+
+    foreach ($superheroes as $superhero) {
+        $nameMatches = strtolower($superhero["name"]) === $query;
+        $aliasMatches = strtolower($superhero["alias"]) === $query;
+
+        if ($nameMatches || $aliasMatches) {
+            $match = $superhero;
+            break;
+        }
+    }
+
+    // Return the matching hero or a not-found message.
+    if ($match !== null) {
+        echo "<h3>" . escapeHtml($match["alias"]) . "</h3>";
+        echo "<h4>" . escapeHtml($match["name"]) . "</h4>";
+        echo "<p>" . escapeHtml($match["biography"]) . "</p>";
+    } else {
+        echo "<p>Superhero not found</p>";
+    }
+}
